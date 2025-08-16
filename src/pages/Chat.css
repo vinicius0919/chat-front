@@ -4,6 +4,7 @@
   height: 100dvh; /* ou 100dvh para lidar melhor com barras do dispositivo */
   width: 100%;
   padding-top: 60px; /* espaço para a barra de mensagens */
+  padding-bottom: 60px; /* espaço para a barra de entrada de mensagens */
   box-sizing: border-box; /* garante que o padding não afete a largura total */
 }
 
