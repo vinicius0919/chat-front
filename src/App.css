@@ -59,18 +59,21 @@ label {
 }
 input[type="text"],
 input[type="number"],
-input[type="password"] {
+input[type="password"],
+select {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
   width: 100%;
   background-color: #fff;
   border: 1px solid var(--lilas-suave);
+  color: #b895b8;
 }
 
 input[type="text"]::placeholder,
 input[type="number"]::placeholder,
-input[type="password"]::placeholder {
+input[type="password"]::placeholder,
+select::placeholder {
   color: #b895b8;
   font-style: italic;
 }
@@ -93,7 +96,7 @@ input[type="submit"]:hover {
   padding: 1rem;
   width: 100%;
   max-width: 600px;
-  
+
 }
 
 .room {
@@ -123,14 +126,6 @@ button {
 }
 
 .success:hover {
-  background-color: var(--roxo-medio);
-}
-
-.error {
-  background-color: var(--vinho-frutado);
-}
-
-.error:hover {
   background-color: var(--roxo-medio);
 }
 

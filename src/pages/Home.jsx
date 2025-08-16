@@ -5,23 +5,35 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   const navigate = useNavigate();
   const [newRoom, setNewRoom] = useState("");
   const [roomLength, setRoomLength] = useState(0);
+  const [roomType, setRoomType] = useState("public");
+  const [roomPassword, setRoomPassword] = useState("");
   const [rooms, setRooms] = useState([]);
 
   const handleCreate = (e) => {
     e.preventDefault();
 
     if (!newRoom.trim()) return alert("Digite um nome para a sala.");
-    if (roomLength <= 0) return alert("O tamanho da sala deve ser maior que 0.");
+    if (roomLength <= 0)
+      return alert("O tamanho da sala deve ser maior que 0.");
 
-    if (rooms.some(r => r.name.toLowerCase() === newRoom.toLowerCase())) {
+    if (rooms.some((r) => r.name.toLowerCase() === newRoom.toLowerCase())) {
       return alert("Já existe uma sala com esse nome!");
     }
 
-    socket.emit("create_channel", newRoom, roomLength, user.username);
+    socket.emit(
+      "create_channel",
+      newRoom,
+      roomLength,
+      user.username,
+      roomType,
+      roomPassword
+    );
 
     // Limpa o formulário
     setNewRoom("");
     setRoomLength(0);
+    setRoomType("public");
+    setRoomPassword("");
   };
 
   const handleDeleteRoom = (room) => {
@@ -35,9 +47,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   };
 
   useEffect(() => {
-
-    socket.emit("get_rooms");
-
+    socket.emit("get_rooms", user.username);
 
     const handleRoomMessages = (data) => {
       setMessages(data);
@@ -68,31 +78,55 @@ const Home = ({ socket, user, setRoom, setBack }) => {
 
   return (
     <>
-    <div className="form-container">
+      <div className="form-container">
+        <form onSubmit={handleCreate} className="create-room-form">
+          <label htmlFor="room">Nome da sala:</label>
+          <input
+            type="text"
+            name="room"
+            placeholder="Digite o nome da sala"
+            value={newRoom}
+            onChange={(e) => setNewRoom(e.target.value)}
+            required
+          />
+          <label htmlFor="room_type">Tipo de sala:</label>
+          <select
+            name="room_type"
+            id="room_type"
+            value={roomType}
+            onChange={(e) => setRoomType(e.target.value)}
+          >
+            <option value="public">Pública</option>
+            <option value="private">Privada</option>
+          </select>
 
-      <form onSubmit={handleCreate} className="create-room-form">
-        <label htmlFor="room">Nome da sala:</label>
-        <input
-          type="text"
-          name="room"
-          placeholder="Digite o nome da sala"
-          value={newRoom}
-          onChange={(e) => setNewRoom(e.target.value)}
-          required
-        />
-        <label htmlFor="room_length">Máximo de participantes:</label>
-        <input
-          type="number"
-          name="room_length"
-          placeholder="Digite o tamanho da sala"
-          value={roomLength}
-          onChange={(e) => setRoomLength(Number(e.target.value))}
-          required
-          min="1"
-        />
-        <input type="submit" value="Criar" />
-      </form>
-    </div>
+          {roomType === "private" && (
+            <>
+              <label htmlFor="room_password">Senha da sala:</label>
+              <input
+                type="password"
+                name="room_password"
+                placeholder="Digite a senha da sala"
+                value={roomPassword}
+                onChange={(e) => setRoomPassword(e.target.value)}
+                required
+              />
+            </>
+          )}
+
+          <label htmlFor="room_length">Máximo de participantes:</label>
+          <input
+            type="number"
+            name="room_length"
+            placeholder="Digite o tamanho da sala"
+            value={roomLength}
+            onChange={(e) => setRoomLength(Number(e.target.value))}
+            required
+            min="1"
+          />
+          <input type="submit" value="Criar" />
+        </form>
+      </div>
 
       <div className="rooms">
         {rooms.length > 0 ? (
@@ -107,7 +141,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
                   Entrar
                 </button>
                 <button
-                  className="error"
+                  className="sucess"
                   onClick={() => handleDeleteRoom(room.name)}
                 >
                   Deletar
