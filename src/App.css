@@ -1,19 +1,53 @@
 * {
   box-sizing: border-box;
 }
+:root {
+  --acai-intenso: #4b1e3f;
+  --roxo-medio: #6e2c63;
+  --vinho-frutado: #8b3a6e;
+  --lilas-suave: #c8a2c8;
+  --creme-coco: #f4e4d4;
+}
 
+
+
+h1,
+h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--acai-intenso);
+}
+
+
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background-color: #fff9fb88;
+  border-radius: 2rem;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
 
 form {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 1rem;
-  background-color: #d1d1d1;
+  background-color: #fff9fb88;
   border-radius: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 label {
   font-weight: bold;
+  color: var(--roxo-medio);
 }
 input[type="text"],
 input[type="number"],
@@ -22,9 +56,19 @@ input[type="password"] {
   border: 1px solid #ccc;
   border-radius: 0.5rem;
   width: 100%;
+  background-color: #fff;
+  border: 1px solid var(--lilas-suave);
 }
+
+input[type="text"]::placeholder,
+input[type="number"]::placeholder,
+input[type="password"]::placeholder {
+  color: #b895b8;
+  font-style: italic;
+}
+
 input[type="submit"] {
-  background-color: #007bff;
+  background-color: var(--vinho-frutado);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -32,7 +76,7 @@ input[type="submit"] {
   cursor: pointer;
 }
 input[type="submit"]:hover {
-  background-color: #0056b3;
+  background-color: var(--roxo-medio);
 }
 
 .rooms {
@@ -45,9 +89,8 @@ input[type="submit"]:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
   padding: 1rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--lilas-suave);
 }
 
 button {
@@ -65,8 +108,33 @@ button {
   background-color: #c82333;
 }
 .success {
-  background-color: #28a745;
+  background-color: var(--vinho-frutado);
 }
+
+.success:hover {
+  background-color: var(--roxo-medio);
+}
+
 .error {
-  background-color: #dc3545;
+  background-color: var(--vinho-frutado);
 }
+
+.error:hover {
+  background-color: var(--roxo-medio);
+}
+
+.room-name {
+  font-weight: bold;
+  color: var(--acai-intenso);
+}
+
+.rooms {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+.btn-actions {
+  display: flex;
+  gap: 10px;
+}
+

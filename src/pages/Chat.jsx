@@ -92,13 +92,15 @@ const Chat = ({ user, room }) => {
 
   return (
     <>
-      <div className="messages_container">
+      <div className="chat_container">
+        <div className="messages_container">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.username === user.username ? 'self' : 'other'}`}>
             <span className="user">{msg.username}</span>{msg.message}
             <span className="time">{msg.time}</span>
           </div>
         ))}
+        </div>
         <form onSubmit={handleSubmit} className="message-form">
           <input
             type="text"

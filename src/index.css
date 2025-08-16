@@ -1,3 +1,11 @@
+:root {
+  --acai-intenso: #4B1E3F;
+  --roxo-medio: #6E2C63;
+  --vinho-frutado: #8B3A6E;
+  --lilas-suave: #C8A2C8;
+  --creme-coco: #F4E4D4;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -6,7 +14,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background: var(--creme-coco);
+  background: linear-gradient(to right, var(--creme-coco), var(--lilas-suave));
   height: 100vh;
 }
 
@@ -24,8 +33,3 @@ body {
   height: 100vh;
 }
 
-.rooms {
-  width: 100%;
-  max-width: 600px;
-  margin: auto;
-}

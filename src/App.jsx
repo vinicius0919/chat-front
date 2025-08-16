@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import Register from "./pages/Register";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -27,35 +28,16 @@ export default function App() {
     }
   }, [room]);
 
-
   return (
     <BrowserRouter>
       <div className="chat-container">
-        <header>
-          {user.username && (
-            <button
-              className="logout-button"
-              onClick={() => {
-                localStorage.removeItem("user");
-                localStorage.removeItem("currentRoom");
-                setUser({ username: null, password: null });
-                setRoom("");
-              }}
-            >
-              Logout
-            </button>
-          )}
-        </header>
+        <Navbar user={user} setUser={setUser} setRoom={setRoom} />
         <Routes>
           <Route
             path="/"
             element={
               user.username ? (
-                <Home
-                  socket={socket}
-                  user={user}
-                  setRoom={setRoom}
-                />
+                <Home socket={socket} user={user} setRoom={setRoom} />
               ) : (
                 <Navigate to="/login" />
               )
@@ -67,13 +49,7 @@ export default function App() {
           />
           <Route
             path="/chat"
-            element={
-              <Chat
-              user={user}
-                socket={socket}
-                room={room}
-              />
-            }
+            element={<Chat user={user} socket={socket} room={room} />}
           />
           <Route
             path="/register"

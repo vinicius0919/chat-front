@@ -1,21 +1,25 @@
+import "./Navbar.css";
+
 import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({user, setUser, setRoom}) => {
   return (
-    <nav>
-      <h1>Chat App</h1>
-      <ul>
-        <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/login">Login</NavLink>
-        </li>
-        <li>
-          <NavLink to="/register">Register</NavLink>
-        </li>
-      </ul>
-    </nav>
+        <nav  >
+          <h1>AçaíTalk</h1>
+          {user.username && (
+            <button
+              className="logout-button"
+              onClick={() => {
+                localStorage.removeItem("user");
+                localStorage.removeItem("currentRoom");
+                setUser({ username: null, password: null });
+                setRoom("");
+              }}
+            >
+              Logout
+            </button>
+          )}
+        </nav>
   );
 };
 
