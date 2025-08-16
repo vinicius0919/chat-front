@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: column; /* mensagens em ordem normal */
   padding: 10px;
+  justify-content: flex-end;
 }
 .message {
   display: flex;
