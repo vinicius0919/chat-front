@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Home = ({ socket, user, setRoom }) => {
+const Home = ({ socket, user, setRoom, setBack }) => {
   const navigate = useNavigate();
   const [newRoom, setNewRoom] = useState("");
   const [roomLength, setRoomLength] = useState(0);
@@ -18,7 +18,6 @@ const Home = ({ socket, user, setRoom }) => {
     }
 
     socket.emit("create_channel", newRoom, roomLength, user.username);
-    console.log("User created room:", newRoom);
 
     // Limpa o formulário
     setNewRoom("");
@@ -27,12 +26,10 @@ const Home = ({ socket, user, setRoom }) => {
 
   const handleDeleteRoom = (room) => {
     socket.emit("delete_channel", room, user.username);
-    console.log("User deleted room:", room);
   };
 
   const handleJoin = (room) => {
     socket.emit("join_channel", room);
-    console.log("User joined room:", room);
     setRoom(room);
     navigate("/chat");
   };
@@ -43,18 +40,15 @@ const Home = ({ socket, user, setRoom }) => {
 
 
     const handleRoomMessages = (data) => {
-      console.log("Received room messages:", data);
       setMessages(data);
     };
 
     const handleChannelsList = (channels) => {
       setRooms(channels);
-      console.log("Available rooms:", channels);
     };
 
     const handleRooms = (data) => {
       setRooms(data);
-      console.log("Available rooms:", data);
     };
 
     socket.on("room_messages", handleRoomMessages);
@@ -68,8 +62,14 @@ const Home = ({ socket, user, setRoom }) => {
     };
   }, [socket]);
 
+  useEffect(() => {
+    setBack(false);
+  }, []);
+
   return (
     <>
+    <div className="form-container">
+
       <form onSubmit={handleCreate} className="create-room-form">
         <label htmlFor="room">Nome da sala:</label>
         <input
@@ -92,6 +92,7 @@ const Home = ({ socket, user, setRoom }) => {
         />
         <input type="submit" value="Criar" />
       </form>
+    </div>
 
       <div className="rooms">
         {rooms.length > 0 ? (
@@ -115,7 +116,7 @@ const Home = ({ socket, user, setRoom }) => {
             </div>
           ))
         ) : (
-          <p>Nenhuma sala disponível no momento.</p>
+          <p>Nenhuma sala disponível no momento. Crie uma nova sala!</p>
         )}
       </div>
     </>

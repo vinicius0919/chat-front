@@ -1,3 +1,4 @@
+
 nav {
   position: fixed; /* necessário para posicionar o título */
   display: flex;
@@ -28,4 +29,15 @@ nav h1 {
 }
 .logout-button:hover {
   background-color: var(--roxo-medio);
+}
+
+.chat-link button {
+  margin-left: auto; /* empurra para a direita */
+  background-color: var(--vinho-frutado);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
