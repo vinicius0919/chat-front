@@ -141,7 +141,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
                   Entrar
                 </button>
                 <button
-                  className="sucess"
+                  className="success"
                   onClick={() => handleDeleteRoom(room.name)}
                 >
                   Deletar
