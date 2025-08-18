@@ -33,3 +33,18 @@ body {
   height: 100vh;
 }
 
+.success-message, .error-message {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+a {
+  text-decoration: none;
+  color: var(--roxo-medio);
+}

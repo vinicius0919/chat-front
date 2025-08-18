@@ -10,14 +10,13 @@ import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 
 export default function App() {
-
   const [back, setBack] = useState(false);
 
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser
       ? JSON.parse(savedUser)
-      : { username: null, password: null };
+      : { username: null, token: null, _id: null };
   });
   const [room, setRoom] = useState(() => {
     const savedRoom = localStorage.getItem("currentRoom");
@@ -31,7 +30,16 @@ export default function App() {
     }
   }, [room]);
 
-
+  useEffect(() => {
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        username: user.username,
+        token: user.token,
+        _id: user._id,
+      })
+    );
+  }, [user]);
 
   return (
     <BrowserRouter>
@@ -41,8 +49,13 @@ export default function App() {
           <Route
             path="/"
             element={
-              user.username ? (
-                <Home socket={socket} user={user} setRoom={setRoom} setBack={setBack} />
+              user.token ? (
+                <Home
+                  socket={socket}
+                  user={user}
+                  setRoom={setRoom}
+                  setBack={setBack}
+                />
               ) : (
                 <Navigate to="/login" />
               )
@@ -50,15 +63,38 @@ export default function App() {
           />
           <Route
             path="/login"
-            element={<Login user={user} setUser={setUser} setBack={setBack} />}
+            element={
+              user.token ? (
+                <Navigate to="/" />
+              ) : (
+                <Login user={user} setUser={setUser} setBack={setBack} />
+              )
+            }
           />
           <Route
             path="/chat"
-            element={<Chat user={user} socket={socket} room={room} setBack={setBack} />}
+            element={
+              !user.token ? (
+                <Navigate to="/login" />
+              ) : (
+                <Chat
+                  user={user}
+                  socket={socket}
+                  room={room}
+                  setBack={setBack}
+                />
+              )
+            }
           />
           <Route
             path="/register"
-            element={<Register user={user} setUser={setUser} setBack={setBack} />}
+            element={
+              user.token ? (
+                <Navigate to="/" />
+              ) : (
+                <Register user={user} setUser={setUser} setBack={setBack} />
+              )
+            }
           />
         </Routes>
       </div>

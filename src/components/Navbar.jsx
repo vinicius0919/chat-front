@@ -31,7 +31,7 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
         </NavLink>
       )}
       <h1>AçaíTalk</h1>
-      {user.username && (
+      {user.token && (
         <button className="menu-button" onClick={() => setActive(!active)}>
           <FcMenu />
         </button>

@@ -101,7 +101,7 @@ const Chat = ({ user, room, setBack }) => {
             >
               <span className="user">{msg.username}</span>
               {msg.message}
-              <span className="time">{msg.time}</span>
+              <span className="time">{msg.time.slice(0, 5)}</span>
             </div>
           ))}
         </div>

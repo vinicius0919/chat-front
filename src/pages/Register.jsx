@@ -1,19 +1,44 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import userAuth from "../hooks/hookUserAuth";
+import passwordValidation from "../hooks/hookPassowordValidate";
+import { useState } from "react";
 
-const Register = ({ user, setUser}) => {
-        const navigate = useNavigate();
-  const handleRegister = (e) => {
+const Register = ({ user, setUser }) => {
+  const navigate = useNavigate();
+
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    setUser({
-      username: e.target.username.value,
-      password: e.target.password.value,
-    });
 
-    navigate("/login"); // Redirect to login after registration
+    const password = e.target.password.value;
+    const confirmPassword = e.target.confirm_password.value;
+    const email = e.target.username.value;
+    const validation = passwordValidation(password);
+    if (!validation.isValid) {
+      setError(validation.message);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("As senhas não coincidem.");
+      return;
+    }
+
+    const response = await userAuth.register(email, password);
+    if (response.errorMessage) {
+      setError(response.errorMessage);
+    } else {
+      setSuccess("Registro bem-sucedido! Redirecionando para o login...");
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    }
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h2>Registro</h2>
       <p>Por favor, preencha os campos abaixo para se registrar.</p>
       <form className="register-form" onSubmit={handleRegister}>
@@ -30,9 +55,11 @@ const Register = ({ user, setUser}) => {
         />
         <input type="submit" value="Registrar" />
       </form>
-        <p>
-            Já tem uma conta? <NavLink to="/login">Faça login</NavLink>
-        </p>
+      {success && <span className="success-message">{success}</span>}
+      {error && <span className="error-message">{error}</span>}
+      <p>
+        Já tem uma conta? <NavLink to="/login">Faça login</NavLink>
+      </p>
     </div>
   );
 };
