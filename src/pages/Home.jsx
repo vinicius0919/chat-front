@@ -79,6 +79,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   return (
     <>
       <div className="form-container">
+      <p>Crie uma nova sala de bate-papo ou entre em uma sala existente!</p>
         <form onSubmit={handleCreate} className="create-room-form">
           <label htmlFor="room">Nome da sala:</label>
           <input
@@ -132,7 +133,10 @@ const Home = ({ socket, user, setRoom, setBack }) => {
         {rooms.length > 0 ? (
           rooms.map((room, index) => (
             <div key={index} className="room">
-              <span className="room-name">{room.name}</span>
+              <div className="room-info">
+                <span className="room-name">{room.name}</span>
+                <p className="room-owner">Criado por: {room.owner}</p>
+              </div>
               <div className="btn-actions">
                 <button
                   className="success"
@@ -140,12 +144,14 @@ const Home = ({ socket, user, setRoom, setBack }) => {
                 >
                   Entrar
                 </button>
-                <button
-                  className="success"
-                  onClick={() => handleDeleteRoom(room.name)}
-                >
-                  Deletar
-                </button>
+                {user.username === room.owner && (
+                  <button
+                    className="success"
+                    onClick={() => handleDeleteRoom(room.name)}
+                  >
+                    Deletar
+                  </button>
+                )}
               </div>
             </div>
           ))

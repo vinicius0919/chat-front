@@ -6,6 +6,15 @@
   --creme-coco: #F4E4D4;
 }
 
+
+
+.title{
+  font-family: "Barrio", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: .2rem;
+}
+
 body {
   display: flex;
   flex-direction: column;
