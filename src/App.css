@@ -17,7 +17,8 @@ h2 {
   color: var(--acai-intenso);
 }
 
-.login-container, .register-container {
+.login-container,
+.register-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,9 +32,12 @@ h2 {
 
 .form-container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   width: 100%;
   padding: 0;
+  margin-top: 100px;
 }
 
 form {
@@ -48,7 +52,6 @@ form {
 }
 
 .create-room-form {
-  margin-top: 100px;
   width: 100%;
   max-width: 600px;
 }
@@ -96,7 +99,6 @@ input[type="submit"]:hover {
   padding: 1rem;
   width: 100%;
   max-width: 600px;
-
 }
 
 .room {
@@ -134,7 +136,6 @@ button {
   color: var(--acai-intenso);
 }
 
-
 .btn-actions {
   display: flex;
   gap: 10px;
@@ -148,6 +149,16 @@ button {
   color: white;
 }
 
+.room-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.room-owner {
+  font-size: 0.9rem;
+  color: var(--roxo-medio);
+  margin-top: 5px;
+}
 
 @media (max-width: 600px) {
   .login-container {

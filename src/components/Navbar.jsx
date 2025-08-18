@@ -30,7 +30,7 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
           <button>Voltar</button>
         </NavLink>
       )}
-      <h1>AçaíTalk</h1>
+      <h1 className="title">AçaíTalk</h1>
       {user.token && (
         <button className="menu-button" onClick={() => setActive(!active)}>
           <FcMenu />
