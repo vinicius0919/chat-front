@@ -157,7 +157,7 @@ button {
 .room-owner {
   font-size: 0.9rem;
   color: var(--roxo-medio);
-  margin-top: 5px;
+  margin: 0;
 }
 
 @media (max-width: 600px) {
