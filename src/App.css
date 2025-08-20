@@ -1,12 +1,16 @@
 * {
   box-sizing: border-box;
 }
+
 :root {
-  --acai-intenso: #4b1e3f;
-  --roxo-medio: #6e2c63;
-  --vinho-frutado: #8b3a6e;
-  --lilas-suave: #c8a2c8;
-  --creme-coco: #f4e4d4;
+  --background: #0E0E10;
+  --container-background: #18181b;
+  --container-background-secondary: #1f1f23;
+  --highlights: #9146ff;
+  --highlights-hover: #a970ff;
+  --text-color: #FFFFFF;
+  --text-color-secondary: #b9bbbe;
+  --borders: #2c2f33;
 }
 
 h1,
@@ -14,7 +18,7 @@ h2 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--acai-intenso);
+  color: var(--highlights);
 }
 
 .login-container,
@@ -45,10 +49,10 @@ form {
   flex-direction: column;
   gap: 10px;
   padding: 1rem;
-  background-color: #fff9fb88;
+  background-color: var(--container-background-secondary);
   border-radius: 2rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--borders);
+  box-shadow: 0px 0px 10px var(--borders);
 }
 
 .create-room-form {
@@ -58,39 +62,41 @@ form {
 
 label {
   font-weight: bold;
-  color: var(--roxo-medio);
+  color: var(--text-color-secondary);
 }
 input[type="text"],
 input[type="number"],
 input[type="password"],
 select {
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borders);
   border-radius: 0.5rem;
   width: 100%;
-  background-color: #fff;
-  border: 1px solid var(--lilas-suave);
-  color: #b895b8;
+  background: var(--container-background-secondary);
+  background-color: var(--container-background);
+  color: var(--text-color-secondary);
+  font-size: 1rem;
 }
 
 input[type="text"]::placeholder,
 input[type="number"]::placeholder,
 input[type="password"]::placeholder,
 select::placeholder {
-  color: #b895b8;
+  color: var(--text-color-secondary);
   font-style: italic;
+  font-size: 1rem;
 }
 
 input[type="submit"] {
-  background-color: var(--vinho-frutado);
-  color: white;
+  background-color: var(--highlights);
+  color: var(--text-color);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
 }
 input[type="submit"]:hover {
-  background-color: var(--roxo-medio);
+  background-color: var(--highlights-hover);
 }
 
 .rooms {
@@ -101,16 +107,24 @@ input[type="submit"]:hover {
   max-width: 600px;
 }
 
+.rooms p {
+  font-size: 1.2rem;
+  color: var(--text-color-secondary);
+  margin: auto;
+  text-align: justify;
+}
+
 .room {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid var(--lilas-suave);
+  border-bottom: 1px solid var(--highlights-hover);
+  cursor: default;
 }
 
 button {
-  color: white;
+  color: var(--text-color);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -118,22 +132,22 @@ button {
 }
 
 .logout-button {
-  background-color: #dc3545;
+  background-color: var(--highlights);
 }
 .logout-button:hover {
-  background-color: #c82333;
+  background-color: var(--highlights-hover);
 }
 .success {
-  background-color: var(--vinho-frutado);
+  background-color: var(--highlights);
 }
 
 .success:hover {
-  background-color: var(--roxo-medio);
+  background-color: var(--highlights-hover);
 }
 
 .room-name {
   font-weight: bold;
-  color: var(--acai-intenso);
+  color: var(--highlights);
 }
 
 .btn-actions {
@@ -142,11 +156,11 @@ button {
 }
 
 .success-message {
-  background-color: var(--lilas-suave);
+  background-color: var(--highlights);
 }
 .error-message {
-  background-color: var(--vinho-frutado);
-  color: white;
+  background-color: var(--highlights-hover);
+  color: var(--text-color);
 }
 
 .room-info {
@@ -156,7 +170,12 @@ button {
 
 .room-owner {
   font-size: 0.9rem;
-  color: var(--roxo-medio);
+  color: var(--text-color-secondary);
+  margin: 0;
+}
+.room-owner-username {
+  font-size: 0.9rem;
+  color: var(--highlights-hover);
   margin: 0;
 }
 

@@ -12,7 +12,7 @@ const Chat = ({ user, room, setBack }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (currentRoom && user.username) {
+    if (currentRoom && user) {
       const data = {
         ...message,
         username: user.username,

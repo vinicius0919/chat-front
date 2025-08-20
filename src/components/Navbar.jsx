@@ -19,8 +19,8 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
     if (!roomName || !password) {
       return alert("Por favor, preencha todos os campos.");
     }
-    socket.emit("join_private_channel", roomName, password, user.username);
-    socket.emit("get_rooms", user.username);
+    socket.emit("join_private_channel", roomName, password, user._id);
+    socket.emit("get_rooms", user._id);
   };
 
   return (
@@ -31,7 +31,7 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
         </NavLink>
       )}
       <h1 className="title">AçaíTalk</h1>
-      {user.token && (
+      {user && (
         <button className="menu-button" onClick={() => setActive(!active)}>
           <FcMenu />
         </button>
@@ -47,7 +47,7 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
               localStorage.removeItem("user");
               localStorage.removeItem("currentRoom");
               setActive(false);
-              setUser({ username: null, password: null });
+              setUser(null);
               setRoom("");
             }}
           >
