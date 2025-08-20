@@ -51,6 +51,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   };
 
   useEffect(() => {
+    if(user){
     socket.emit("get_rooms", user._id);
     const addRoom = (room) => {
       setRooms((prevRooms) => [...prevRooms, room]);
@@ -81,6 +82,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
       socket.off("room_messages", handleRoomMessages);
       socket.off("rooms", handleRooms);
     };
+    }
   }, [socket]);
 
   useEffect(() => {
