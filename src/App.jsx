@@ -16,7 +16,7 @@ export default function App() {
     const savedUser = localStorage.getItem("user");
     return savedUser
       ? JSON.parse(savedUser)
-      : { username: null, token: null, _id: null };
+      : null ;
   });
   const [room, setRoom] = useState(() => {
     const savedRoom = localStorage.getItem("currentRoom");
