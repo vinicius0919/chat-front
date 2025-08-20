@@ -5,24 +5,25 @@ nav {
   width: 100%;
   height: 60px;
   padding: 2rem;
-  background-color: var(--lilas-suave); /* cor do fundo */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* borda inferior */
+  background-color: var(--container-background); /* cor do fundo */
+  border-bottom: 1px solid var(--borders); /* borda inferior */
 }
 
 nav h1 {
   position: absolute;
   left: 50%;
   transform: translateX(-50%); /* centraliza horizontalmente */
-  color: var(--acai-intenso);
+  color: var(--highlights);
   margin: 0;
+  font-size: 1.8rem;
 }
 .menu-button {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: auto; /* empurra para a direita */
-  background-color: var(--vinho-frutado);
-  color: white;
+  background-color: var(--highlights);
+  color: var(--text-color);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -35,13 +36,13 @@ nav h1 {
 }
 
 .logout-button:hover {
-  background-color: var(--roxo-medio);
+  background-color: var(--highlights-hover);
 }
 
 .chat-link button {
   margin-left: auto; /* empurra para a direita */
-  background-color: var(--vinho-frutado);
-  color: white;
+  background-color: var(--highlights);
+  color: var(--text-color);
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
@@ -55,7 +56,7 @@ nav h1 {
   position: absolute;
   top: 60px; /* abaixo do nav */
   right: 0;
-  background-color: var(--lilas-suave);
+  background-color: var(--container-background);
   padding: 1rem;
   border-radius: 8px;
 }
@@ -75,32 +76,32 @@ nav h1 {
 
 .menu ul li {
   padding: 1rem;
-  color: var(--acai-intenso);
-  border-bottom: 1px solid var(--roxo-medio);
+  color: var(--highlights);
+  border-bottom: 1px solid var(--highlights-hover);
+  cursor: pointer;
 }
 
 /* definir container para ocupar toda a tela e sobrepor os itens*/
 
-.container_form_private{
-
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5); /* fundo semi-transparente */
+.container_form_private {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5); /* fundo semi-transparente */
 }
 .container_form_private.inactive {
-    display: none; /* esconde o container */
+  display: none; /* esconde o container */
 }
 
 .container_form_private form {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px; /* largura fixa */
+  background-color: var(--container-background-secondary);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--borders);
+  width: 300px; /* largura fixa */
 }

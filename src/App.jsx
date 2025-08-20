@@ -31,6 +31,7 @@ export default function App() {
   }, [room]);
 
   useEffect(() => {
+    if (!user) return;
     localStorage.setItem(
       "user",
       JSON.stringify({
@@ -49,7 +50,7 @@ export default function App() {
           <Route
             path="/"
             element={
-              user.token ? (
+              user ? (
                 <Home
                   socket={socket}
                   user={user}
@@ -64,7 +65,7 @@ export default function App() {
           <Route
             path="/login"
             element={
-              user.token ? (
+              user ? (
                 <Navigate to="/" />
               ) : (
                 <Login user={user} setUser={setUser} setBack={setBack} />
@@ -74,7 +75,7 @@ export default function App() {
           <Route
             path="/chat"
             element={
-              !user.token ? (
+              !user ? (
                 <Navigate to="/login" />
               ) : (
                 <Chat
@@ -89,7 +90,7 @@ export default function App() {
           <Route
             path="/register"
             element={
-              user.token ? (
+              user ? (
                 <Navigate to="/" />
               ) : (
                 <Register user={user} setUser={setUser} setBack={setBack} />

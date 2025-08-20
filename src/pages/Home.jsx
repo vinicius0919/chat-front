@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const Home = ({ socket, user, setRoom, setBack }) => {
   const navigate = useNavigate();
+  const [toggle, setToggle] = useState(false);
   const [newRoom, setNewRoom] = useState("");
+  const [roomDescription, setRoomDescription] = useState("");
   const [roomLength, setRoomLength] = useState(0);
   const [roomType, setRoomType] = useState("public");
   const [roomPassword, setRoomPassword] = useState("");
@@ -23,10 +25,12 @@ const Home = ({ socket, user, setRoom, setBack }) => {
     socket.emit(
       "create_channel",
       newRoom,
+      roomDescription,
       roomLength,
-      user.username,
+      user._id,
       roomType,
-      roomPassword
+      roomPassword,
+      user.username
     );
 
     // Limpa o formulário
@@ -36,8 +40,8 @@ const Home = ({ socket, user, setRoom, setBack }) => {
     setRoomPassword("");
   };
 
-  const handleDeleteRoom = (room) => {
-    socket.emit("delete_channel", room, user.username);
+  const handleDeleteRoom = (roomId) => {
+    socket.emit("delete_channel", roomId, user._id);
   };
 
   const handleJoin = (room) => {
@@ -47,27 +51,34 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   };
 
   useEffect(() => {
-    socket.emit("get_rooms", user.username);
+    socket.emit("get_rooms", user._id);
+    const addRoom = (room) => {
+      setRooms((prevRooms) => [...prevRooms, room]);
+      console.log("Sala criada:", room);
+    };
+    const removeRoom = (room) =>{
+      console.log("Sala deletada:", room);
+      setRooms((prevRooms) =>
+        prevRooms.filter((r) => r._id !== room._id)
+      );
+    }
 
     const handleRoomMessages = (data) => {
       setMessages(data);
     };
 
-    const handleChannelsList = (channels) => {
-      setRooms(channels);
-    };
-
     const handleRooms = (data) => {
       setRooms(data);
     };
-
+    socket.on("channel_created", addRoom);
+    socket.on("channel_deleted", removeRoom);
     socket.on("room_messages", handleRoomMessages);
-    socket.on("channels_list", handleChannelsList);
     socket.on("rooms", handleRooms);
 
     return () => {
+      socket.off("channel_created", addRoom);
+      socket.off("channel_deleted", removeRoom);
       socket.off("room_messages", handleRoomMessages);
-      socket.off("channels_list", handleChannelsList);
       socket.off("rooms", handleRooms);
     };
   }, [socket]);
@@ -85,11 +96,23 @@ const Home = ({ socket, user, setRoom, setBack }) => {
           <input
             type="text"
             name="room"
+            id="room"
             placeholder="Digite o nome da sala"
             value={newRoom}
             onChange={(e) => setNewRoom(e.target.value)}
             required
           />
+          <label htmlFor="room_description">Descrição da sala:</label>
+          <input
+            type="text"
+            name="room_description"
+            id="room_description"
+            placeholder="Digite a descrição da sala"
+            value={roomDescription}
+            onChange={(e) => setRoomDescription(e.target.value)}
+            required
+          />
+
           <label htmlFor="room_type">Tipo de sala:</label>
           <select
             name="room_type"
@@ -105,13 +128,18 @@ const Home = ({ socket, user, setRoom, setBack }) => {
             <>
               <label htmlFor="room_password">Senha da sala:</label>
               <input
-                type="password"
+                type={toggle ? "text" : "password"}
                 name="room_password"
                 placeholder="Digite a senha da sala"
                 value={roomPassword}
                 onChange={(e) => setRoomPassword(e.target.value)}
+                
                 required
               />
+              <div className="toggle-password">
+                <input type="checkbox" name="see_room_password" id="see_room_password" onChange={() => setToggle(!toggle)} />
+                <label htmlFor="see_room_password">Ver senha</label>
+              </div>
             </>
           )}
 
@@ -135,7 +163,8 @@ const Home = ({ socket, user, setRoom, setBack }) => {
             <div key={index} className="room">
               <div className="room-info">
                 <span className="room-name">{room.name}</span>
-                <p className="room-owner">Criado por: {room.owner}</p>
+                <p className="room-owner">Criado por:
+                  <span className="room-owner-username"> {room.owner.username}</span></p>
               </div>
               <div className="btn-actions">
                 <button
@@ -144,10 +173,10 @@ const Home = ({ socket, user, setRoom, setBack }) => {
                 >
                   Entrar
                 </button>
-                {user.username === room.owner && (
+                {user._id === room.owner._id && (
                   <button
                     className="success"
-                    onClick={() => handleDeleteRoom(room.name)}
+                    onClick={() => handleDeleteRoom(room._id)}
                   >
                     Deletar
                   </button>
