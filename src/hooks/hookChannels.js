@@ -1,4 +1,4 @@
-const url = import.meta.env.VITE_LOCAL_URL; // URL do servidor
+const url = import.meta.env.VITE_SERVER_URL; // URL do servidor
 
 const channelsApi = {
     searchChannels: async (query) => {
