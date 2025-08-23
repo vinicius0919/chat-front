@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
+import SearchPage from "./pages/searchPage";
 
 export default function App() {
   const [back, setBack] = useState(false);
@@ -84,6 +85,16 @@ export default function App() {
                   room={room}
                   setBack={setBack}
                 />
+              )
+            }
+          />
+          <Route
+            path="/search/:query"
+            element={
+              !user ? (
+                <Navigate to="/login" />
+              ) : (
+                <SearchPage user={user} />
               )
             }
           />

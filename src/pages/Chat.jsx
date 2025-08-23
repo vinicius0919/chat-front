@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import socket from "../socket";
 import "./Chat.css";
 
 const Chat = ({ user, room, setBack }) => {
   const [message, setMessage] = useState({ message: "" });
   const [messages, setMessages] = useState([]);
+  const navigate = useNavigate();
 
 
   // Recupera a sala do localStorage se não foi passada como prop
@@ -29,28 +31,6 @@ const Chat = ({ user, room, setBack }) => {
   }, []);
 
 
-  // useEffect para garantir conexão do socket
-  useEffect(() => {
-
-    if (!socket.connected) {
-      socket.connect();
-    }
-
-    const handleConnect = () => {
-    };
-
-    const handleDisconnect = () => {
-    };
-
-    socket.on("connect", handleConnect);
-    socket.on("disconnect", handleDisconnect);
-
-    return () => {
-      socket.off("connect", handleConnect);
-      socket.off("disconnect", handleDisconnect);
-    };
-  }, []);
-
   useEffect(() => {
 
 
@@ -66,13 +46,17 @@ const Chat = ({ user, room, setBack }) => {
 
     const handleRoomMessages = (msgs) => {
       console.log("Mensagens da sala:", msgs);
-      setMessages(msgs.messages);
+      if (msgs && msgs.messages) {
+        setMessages(msgs.messages);
+      }
     };
 
     const handleMessage = (msg) => {
       setMessages((prev) => [...prev, msg]);
     };
-
+    socket.on("error", (error) => {
+      navigate("/");
+    });
     socket.on("room_messages", handleRoomMessages);
     socket.on("message", handleMessage);
 

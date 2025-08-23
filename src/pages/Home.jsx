@@ -6,7 +6,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   const [toggle, setToggle] = useState(false);
   const [newRoom, setNewRoom] = useState("");
   const [roomDescription, setRoomDescription] = useState("");
-  const [roomLength, setRoomLength] = useState(0);
+  const [roomLength, setRoomLength] = useState(2);
   const [roomType, setRoomType] = useState("public");
   const [roomPassword, setRoomPassword] = useState("");
   const [rooms, setRooms] = useState([]);
