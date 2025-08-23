@@ -31,7 +31,9 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
           <button>Voltar</button>
         </NavLink>
       )}
-      <h1 className="title">AçaíTalk</h1>
+      <NavLink to="/" className="chat-link">
+        <h1 className="title">AçaíTalk</h1>
+      </NavLink>
       {user && (
         <button className="menu-button" onClick={() => setActive(!active)}>
           <FcMenu />
@@ -40,6 +42,11 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
 
       <div className={`menu ${active ? "active" : "inactive"}`}>
         <ul>
+          <li>
+            <NavLink to={`/search/query=""`} className="chat-link" onClick={() => setActive(false)}>
+              Procurar sala
+            </NavLink>
+          </li>
           <li onClick={() => setActivePrivate(!activePrivate)}>
             Adicionar sala
           </li>
