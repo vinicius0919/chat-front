@@ -1,4 +1,4 @@
-const serverUrl = `${import.meta.env.VITE_LOCAL_URL}/api/users`; // URL do servidor de autenticação
+const serverUrl = `${import.meta.env.VITE_SERVER_URL}/api/users`; // URL do servidor de autenticação
 
 const userAuth = {
   login: async (username, password) => {
