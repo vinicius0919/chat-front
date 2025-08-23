@@ -9,7 +9,7 @@ nav {
   border-bottom: 1px solid var(--borders); /* borda inferior */
 }
 
-nav h1 {
+nav .title {
   position: absolute;
   left: 50%;
   transform: translateX(-50%); /* centraliza horizontalmente */
