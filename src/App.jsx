@@ -73,7 +73,7 @@ export default function App() {
             }
           />
           <Route
-            path="/chat"
+            path="/chat/:id"
             element={
               !user ? (
                 <Navigate to="/login" />

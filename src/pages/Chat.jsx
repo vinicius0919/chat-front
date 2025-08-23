@@ -63,10 +63,10 @@ const Chat = ({ user, room, setBack }) => {
     socket.off("message");
 
     socket.emit("join_channel", currentRoom);
-    socket.emit("get_room_messages", currentRoom);
 
     const handleRoomMessages = (msgs) => {
-      setMessages(msgs);
+      console.log("Mensagens da sala:", msgs);
+      setMessages(msgs.messages);
     };
 
     const handleMessage = (msg) => {
@@ -92,7 +92,7 @@ const Chat = ({ user, room, setBack }) => {
     <>
       <div className="chat_container">
         <div className="messages_container">
-          {messages.map((msg, index) => (
+          {messages && messages.map((msg, index) => (
             <div
               key={index}
               className={`message ${

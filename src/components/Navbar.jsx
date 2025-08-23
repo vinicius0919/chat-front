@@ -9,17 +9,18 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
   const [activePrivate, setActivePrivate] = useState(false);
   const [formData, setFormData] = useState({
     roomName: "",
-    password: "",
+    type: "public",
+    password: null,
   });
 
   // function to enter in a private room
   const handleJoinPrivateRoom = (e) => {
     e.preventDefault();
-    const { roomName, password } = formData;
-    if (!roomName || !password) {
+    const { roomName, type, password } = formData;
+    if (!roomName) {
       return alert("Por favor, preencha todos os campos.");
     }
-    socket.emit("join_private_channel", roomName, password, user._id);
+    socket.emit("join_private_channel", roomName, type, password, user._id);
     socket.emit("get_rooms", user._id);
   };
 
@@ -40,7 +41,7 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
       <div className={`menu ${active ? "active" : "inactive"}`}>
         <ul>
           <li onClick={() => setActivePrivate(!activePrivate)}>
-            Adicionar sala privada
+            Adicionar sala
           </li>
           <li
             onClick={() => {
@@ -72,17 +73,31 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
               setFormData({ ...formData, roomName: e.target.value })
             }
           />
-          <label htmlFor="password">Senha</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Senha"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-          />
+          <label htmlFor="type">Tipo de sala</label>
+          <select
+            name="type"
+            id="type"
+            value={formData.type}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+          >
+            <option value="public">Pública</option>
+            <option value="private">Privada</option>
+          </select>
+          {formData.type === "private" && (
+            <>
+              <label htmlFor="password">Senha</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Senha"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+              />
+            </>
+          )}
           <button
             type="submit"
             className="success"
