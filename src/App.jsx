@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
-import SearchPage from "./pages/searchPage";
+import SearchPage from "./pages/SearchPages";
 
 export default function App() {
   const [back, setBack] = useState(false);
