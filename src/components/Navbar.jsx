@@ -31,8 +31,7 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
           <button>Voltar</button>
         </NavLink>
       )}
-      <NavLink to="/" className="chat-link">
-        <h1 className="title">AçaíTalk</h1>
+      <NavLink to="/" className="title">AçaíTalk
       </NavLink>
       {user && (
         <button className="menu-button" onClick={() => setActive(!active)}>
