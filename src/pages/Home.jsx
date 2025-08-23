@@ -45,9 +45,8 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   };
 
   const handleJoin = (room) => {
-    socket.emit("join_channel", room);
     setRoom(room);
-    navigate("/chat");
+    navigate(`/chat/${room}`);
   };
 
   useEffect(() => {
@@ -171,7 +170,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
               <div className="btn-actions">
                 <button
                   className="success"
-                  onClick={() => handleJoin(room.name)}
+                  onClick={() => handleJoin(room._id)}
                 >
                   Entrar
                 </button>
