@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io(import.meta.env.VITE_LOCAL_URL, {
+const socket = io(import.meta.env.VITE_SERVER_URL, {
   transports: ["websocket", "polling"], // Use WebSocket and Polling as transports
   autoConnect: true, // Conecta automaticamente
   reconnection: true, // Habilita reconexão automática
