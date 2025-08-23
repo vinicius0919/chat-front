@@ -56,11 +56,10 @@ const SearchPage = ({ user }) => {
                 </p>
               </div>
               <div className="btn-actions">
-                {room.members.includes(user._id) ? (
-                                      <NavLink to={`/chat/${room._id}`} className="chat-link">
+                {room.members.map((member) => member._id === user._id).length > 0 ? (
+                  <NavLink to={`/chat/${room._id}`} className="chat-link">
                     <button className="success">Conversar</button>
                   </NavLink>
-
                 ) : (
                   <button
                     className="success"

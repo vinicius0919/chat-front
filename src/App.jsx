@@ -74,15 +74,13 @@ export default function App() {
             }
           />
           <Route
-            path="/chat/:id"
+            path="/chat/:roomId"
             element={
               !user ? (
                 <Navigate to="/login" />
               ) : (
                 <Chat
                   user={user}
-                  socket={socket}
-                  room={room}
                   setBack={setBack}
                 />
               )
