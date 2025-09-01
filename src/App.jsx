@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect, use } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import socket from "./socket";
@@ -9,44 +9,19 @@ import Chat from "./pages/Chat";
 import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import SearchPage from "./pages/SearchPages";
+import UserContext from "./contexts/userContext";
+import Profile from "./pages/Profile";
 
 export default function App() {
   const [back, setBack] = useState(false);
 
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser
-      ? JSON.parse(savedUser)
-      : null ;
-  });
-  const [room, setRoom] = useState(() => {
-    const savedRoom = localStorage.getItem("currentRoom");
-    return savedRoom || "";
-  });
+  const {user} = useContext(UserContext);
 
-  // Salva a sala atual no localStorage
-  useEffect(() => {
-    if (room) {
-      localStorage.setItem("currentRoom", room);
-    }
-  }, [room]);
-
-  useEffect(() => {
-    if (!user) return;
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        username: user.username,
-        token: user.token,
-        _id: user._id,
-      })
-    );
-  }, [user]);
 
   return (
     <BrowserRouter>
       <div className="chat-container">
-        <Navbar user={user} setUser={setUser} setRoom={setRoom} back={back} />
+        <Navbar back={back} />
         <Routes>
           <Route
             path="/"
@@ -54,8 +29,6 @@ export default function App() {
               user ? (
                 <Home
                   socket={socket}
-                  user={user}
-                  setRoom={setRoom}
                   setBack={setBack}
                 />
               ) : (
@@ -63,13 +36,14 @@ export default function App() {
               )
             }
           />
+          <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
           <Route
             path="/login"
             element={
               user ? (
                 <Navigate to="/" />
               ) : (
-                <Login user={user} setUser={setUser} setBack={setBack} />
+                <Login setBack={setBack} />
               )
             }
           />
@@ -80,7 +54,6 @@ export default function App() {
                 <Navigate to="/login" />
               ) : (
                 <Chat
-                  user={user}
                   setBack={setBack}
                 />
               )
@@ -92,7 +65,7 @@ export default function App() {
               !user ? (
                 <Navigate to="/login" />
               ) : (
-                <SearchPage user={user} />
+                <SearchPage />
               )
             }
           />
@@ -102,7 +75,7 @@ export default function App() {
               user ? (
                 <Navigate to="/" />
               ) : (
-                <Register user={user} setUser={setUser} setBack={setBack} />
+                <Register setBack={setBack} />
               )
             }
           />

@@ -1,0 +1,77 @@
+
+.container-form-user-profile {
+    padding: 5rem 1rem 0 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.default-profile-icon {
+    font-size: 4rem;
+    color: var(--text-color-secondary);
+    margin: auto;
+}
+
+.container-form-user-profile form{
+    width: 100%;
+    gap: 1rem;
+}
+
+.container-form-user-profile form img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: auto;
+}
+
+.profile-assets-container {
+    position: absolute;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--container-background-secondary);
+    margin-top: 20px;
+    border-radius: 2rem;
+    box-shadow: 0 0 10px var(--borders);
+}
+
+.profile-assets-container.inactive {
+    display: none;
+}
+
+.profile-assets {
+    display: flex;
+    z-index: 1000;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-assets img {
+    width: 120px;
+    height: 120px;
+    border-radius: 10%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.profile-assets img:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px var(--borders));
+    transition: .2s all;
+}
+
+.profile-assets img.selected {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 5px var(--highlights-hover));
+    transition: .5s all;
+}

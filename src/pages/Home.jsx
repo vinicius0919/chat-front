@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../contexts/userContext";
 
-const Home = ({ socket, user, setRoom, setBack }) => {
+const Home = ({ socket, setBack }) => {
   const navigate = useNavigate();
+
+  const { user } = useContext(UserContext);
+
   const [toggle, setToggle] = useState(false);
   const [newRoom, setNewRoom] = useState("");
   const [roomDescription, setRoomDescription] = useState("");
@@ -45,42 +49,39 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   };
 
   const handleJoin = (room) => {
-    setRoom(room);
     navigate(`/chat/${room}`);
   };
 
   useEffect(() => {
-    if(user){
-    socket.emit("get_rooms", user._id);
-    const addRoom = (room) => {
-      setRooms((prevRooms) => [...prevRooms, room]);
-      console.log("Sala criada:", room);
-    };
-    const removeRoom = (room) =>{
-      console.log("Sala deletada:", room);
-      setRooms((prevRooms) =>
-        prevRooms.filter((r) => r._id !== room._id)
-      );
-    }
+    if (user) {
+      socket.emit("get_rooms", user._id);
+      const addRoom = (room) => {
+        setRooms((prevRooms) => [...prevRooms, room]);
+        console.log("Sala criada:", room);
+      };
+      const removeRoom = (room) => {
+        console.log("Sala deletada:", room);
+        setRooms((prevRooms) => prevRooms.filter((r) => r._id !== room._id));
+      };
 
-    const handleRoomMessages = (data) => {
-      setMessages(data);
-    };
+      const handleRoomMessages = (data) => {
+        setMessages(data);
+      };
 
-    const handleRooms = (data) => {
-      setRooms(data);
-    };
-    socket.on("channel_created", addRoom);
-    socket.on("channel_deleted", removeRoom);
-    socket.on("room_messages", handleRoomMessages);
-    socket.on("rooms", handleRooms);
+      const handleRooms = (data) => {
+        setRooms(data);
+      };
+      socket.on("channel_created", addRoom);
+      socket.on("channel_deleted", removeRoom);
+      socket.on("room_messages", handleRoomMessages);
+      socket.on("rooms", handleRooms);
 
-    return () => {
-      socket.off("channel_created", addRoom);
-      socket.off("channel_deleted", removeRoom);
-      socket.off("room_messages", handleRoomMessages);
-      socket.off("rooms", handleRooms);
-    };
+      return () => {
+        socket.off("channel_created", addRoom);
+        socket.off("channel_deleted", removeRoom);
+        socket.off("room_messages", handleRoomMessages);
+        socket.off("rooms", handleRooms);
+      };
     }
   }, [socket]);
 
@@ -91,7 +92,7 @@ const Home = ({ socket, user, setRoom, setBack }) => {
   return (
     <>
       <div className="form-container">
-      <p>Crie uma nova sala de bate-papo ou entre em uma sala existente!</p>
+        <p>Crie uma nova sala de bate-papo ou entre em uma sala existente!</p>
         <form onSubmit={handleCreate} className="create-room-form">
           <label htmlFor="room">Nome da sala:</label>
           <input
@@ -134,11 +135,15 @@ const Home = ({ socket, user, setRoom, setBack }) => {
                 placeholder="Digite a senha da sala"
                 value={roomPassword}
                 onChange={(e) => setRoomPassword(e.target.value)}
-                
                 required
               />
               <div className="toggle-password">
-                <input type="checkbox" name="see_room_password" id="see_room_password" onChange={() => setToggle(!toggle)} />
+                <input
+                  type="checkbox"
+                  name="see_room_password"
+                  id="see_room_password"
+                  onChange={() => setToggle(!toggle)}
+                />
                 <label htmlFor="see_room_password">Ver senha</label>
               </div>
             </>
@@ -164,8 +169,13 @@ const Home = ({ socket, user, setRoom, setBack }) => {
             <div key={index} className="room">
               <div className="room-info">
                 <span className="room-name">{room.name}</span>
-                <p className="room-owner">Criado por:
-                  <span className="room-owner-username"> {room.owner.username}</span></p>
+                <p className="room-owner">
+                  Criado por:
+                  <span className="room-owner-username">
+                    {" "}
+                    {room.owner.username}
+                  </span>
+                </p>
               </div>
               <div className="btn-actions">
                 <button

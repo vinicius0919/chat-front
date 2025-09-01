@@ -1,19 +1,23 @@
-import { useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import channelsApi from "../hooks/hookChannels";
 import "./SearchPage.css";
-const SearchPage = ({ user }) => {
+import { useContext } from "react";
+import UserContext from "../contexts/userContext";
+const SearchPage = () => {
   const { query } = useParams();
+  const { user } = useContext(UserContext);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   const [results, setResults] = useState([]);
   const handleSearch = async (e) => {
     e.preventDefault();
-    const data = await channelsApi.searchChannels(search);
-    setResults(data);
+    if (!search) return;
+    navigate(`/search/${search}`);
   };
   const handleJoin = (channelId) => {
     channelsApi
-      .addMember(channelId, user._id)
+      .addMember(user.token, channelId, user._id)
       .then((response) => {
         // Adiciona o usuário à sala
         console.log(response);
@@ -30,16 +34,29 @@ const SearchPage = ({ user }) => {
         console.error("Erro ao entrar na sala:", error);
       });
   };
+
+  // Busca canais quando o parâmetro de busca muda
+  useEffect(() => {
+    const fetchData = async () => {
+      if (query && search) {
+        const data = await channelsApi.searchChannels(user.token, query);
+        setResults(data);
+      }
+    };
+    fetchData();
+  }, [query]);
+
   return (
     <div className="search-page">
-      <h1>Search Page</h1>
+      <h1>Pesquisar</h1>
       <form onSubmit={handleSearch}>
         <input
           type="text"
           value={search}
+          placeholder="Digite o nome do canal"
           onChange={(e) => setSearch(e.target.value)}
         />
-        <input type="submit" value={"Search"} />
+        <input type="submit" value="Procurar" />
       </form>
       <div className="rooms">
         {results.length > 0 ? (
@@ -50,13 +67,13 @@ const SearchPage = ({ user }) => {
                 <p className="room-owner">
                   Criado por:
                   <span className="room-owner-username">
-                    {" "}
                     {room.owner.username}
                   </span>
                 </p>
               </div>
               <div className="btn-actions">
-                {room.members.map((member) => member._id === user._id).length > 0 ? (
+                {room.members.map((member) => member._id === user._id).length >
+                0 ? (
                   <NavLink to={`/chat/${room._id}`} className="chat-link">
                     <button className="success">Conversar</button>
                   </NavLink>
@@ -80,7 +97,10 @@ const SearchPage = ({ user }) => {
             </div>
           ))
         ) : (
+          <>  
           <p>Nenhum resultado encontrado!</p>
+          <p>Apenas canais públicos são exibidos.</p>
+          </>
         )}
       </div>
     </div>
