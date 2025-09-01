@@ -2,27 +2,16 @@ import "./Navbar.css";
 import socket from "../socket";
 import { NavLink } from "react-router-dom";
 import { FcMenu } from "react-icons/fc";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../contexts/userContext";
+import { FaRegUserCircle } from "react-icons/fa";
+import FormJoinPrivateRoom from "./FormJoinPrivateRoom";
+import FormUserProfile from "./FormUserProfile";
 
-const Navbar = ({ user, setUser, setRoom, back }) => {
+const Navbar = ({ back }) => {
+  const { user, setUser } = useContext(UserContext);
   const [active, setActive] = useState(false);
   const [activePrivate, setActivePrivate] = useState(false);
-  const [formData, setFormData] = useState({
-    roomName: "",
-    type: "public",
-    password: null,
-  });
-
-  // function to enter in a private room
-  const handleJoinPrivateRoom = (e) => {
-    e.preventDefault();
-    const { roomName, type, password } = formData;
-    if (!roomName) {
-      return alert("Por favor, preencha todos os campos.");
-    }
-    socket.emit("join_private_channel", roomName, type, password, user._id);
-    socket.emit("get_rooms", user._id);
-  };
 
   return (
     <nav>
@@ -31,18 +20,49 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
           <button>Voltar</button>
         </NavLink>
       )}
-      <NavLink to="/" className="title">AçaíTalk
+      <NavLink to="/" className="title">
+        AçaíTalk
       </NavLink>
       {user && (
-        <button className="menu-button" onClick={() => setActive(!active)}>
+        <button
+          className="menu-button"
+          onClick={() => {
+            setActive(!active);
+          }}
+        >
           <FcMenu />
         </button>
       )}
 
       <div className={`menu ${active ? "active" : "inactive"}`}>
+        {/* add background div */}
+        <div className="background" onClick={() => setActive(false)} />
         <ul>
           <li>
-            <NavLink to={`/search/query=""`} className="chat-link" onClick={() => setActive(false)}>
+            <NavLink
+              to={`/profile`}
+              className="chat-link"
+              onClick={() => setActive(false)}
+            >
+              <FaRegUserCircle className="user-profile-icon" />
+              Meu Perfil
+            </NavLink>
+          </li>
+                    <li>
+            <NavLink
+              to={`/`}
+              className="chat-link"
+              onClick={() => setActive(false)}
+            >
+              Início
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={`/search/""`}
+              className="chat-link"
+              onClick={() => setActive(false)}
+            >
               Procurar sala
             </NavLink>
           </li>
@@ -55,7 +75,6 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
               localStorage.removeItem("currentRoom");
               setActive(false);
               setUser(null);
-              setRoom("");
             }}
           >
             Sair
@@ -63,63 +82,12 @@ const Navbar = ({ user, setUser, setRoom, back }) => {
         </ul>
       </div>
 
-      <div
-        className={`container_form_private ${
-          activePrivate ? "active" : "inactive"
-        }`}
-      >
-        <form>
-          <label htmlFor="roomName">Nome da sala</label>
-          <input
-            type="text"
-            id="roomName"
-            placeholder="Nome da sala"
-            value={formData.roomName}
-            onChange={(e) =>
-              setFormData({ ...formData, roomName: e.target.value })
-            }
-          />
-          <label htmlFor="type">Tipo de sala</label>
-          <select
-            name="type"
-            id="type"
-            value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-          >
-            <option value="public">Pública</option>
-            <option value="private">Privada</option>
-          </select>
-          {formData.type === "private" && (
-            <>
-              <label htmlFor="password">Senha</label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Senha"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-              />
-            </>
-          )}
-          <button
-            type="submit"
-            className="success"
-            onClick={handleJoinPrivateRoom}
-          >
-            Entrar
-          </button>
-          <button
-            type="button"
-            className="success"
-            onClick={() => setActivePrivate(false)}
-          >
-            Cancelar
-          </button>
-        </form>
-      </div>
+      {/* <FormUserProfile active={active} /> */}
+      <FormJoinPrivateRoom
+        activePrivate={activePrivate}
+        setActivePrivate={setActivePrivate}
+        setActive={setActive}
+      />
     </nav>
   );
 };

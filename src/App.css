@@ -67,6 +67,7 @@ label {
 input[type="text"],
 input[type="number"],
 input[type="password"],
+input[type="email"],
 select {
   padding: 0.5rem;
   border: 1px solid var(--borders);
@@ -81,6 +82,7 @@ select {
 input[type="text"]::placeholder,
 input[type="number"]::placeholder,
 input[type="password"]::placeholder,
+input[type="email"]::placeholder,
 select::placeholder {
   color: var(--text-color-secondary);
   font-style: italic;
@@ -143,6 +145,13 @@ button {
 
 .success:hover {
   background-color: var(--highlights-hover);
+}
+.secondary {
+  background-color: var(--container-background-secondary);
+  border: 1px solid var(--borders);
+}
+.secondary:hover {
+  background-color: var(--borders);
 }
 
 .room-name {

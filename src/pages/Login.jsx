@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import userAuth from "../hooks/hookUserAuth";
+import UserContext from "../contexts/userContext";
 
-const Login = ({ user, setUser }) => {
+const Login = () => {
+  const { setUser } = useContext(UserContext);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -27,6 +29,7 @@ const Login = ({ user, setUser }) => {
         username: username,
         token: response.token,
         _id: response.userId,
+        profileImage: response.profileImage || null,
       });
       navigate("/"); // Redirect to home after login
     }

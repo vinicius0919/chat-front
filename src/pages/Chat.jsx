@@ -2,9 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import socket from "../socket";
 import "./Chat.css";
+import { useContext } from "react";
+import UserContext from "../contexts/userContext";
+import User from "../assets/user.png";
+import profileAssets from "../hooks/hookProfileAssets";
 
-const Chat = ({ user, setBack }) => {
+const Chat = ({ setBack }) => {
   const { roomId } = useParams(); // pega da URL
+  const { user } = useContext(UserContext);
+  const [usersInfo, setUsersInfo] = useState([]);
   const [message, setMessage] = useState({ message: "" });
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
@@ -16,7 +22,6 @@ const Chat = ({ user, setBack }) => {
         ...message,
         username: user.username,
         time: new Date().toLocaleTimeString(),
-        channel: roomId,
       };
 
       socket.emit("send_message_to_channel", roomId, data);
@@ -37,9 +42,10 @@ const Chat = ({ user, setBack }) => {
 
     socket.emit("join_channel", roomId);
 
-    const handleRoomMessages = (msgs) => {
-      if (msgs && msgs.messages) {
+    const handleRoomMessages = (msgs, members) => {
+      if (msgs && msgs.messages && members) {
         setMessages(msgs.messages);
+        setUsersInfo(members);
       }
     };
 
@@ -72,18 +78,47 @@ const Chat = ({ user, setBack }) => {
   return (
     <div className="chat_container">
       <div className="messages_container">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${
-              msg.username === user.username ? "self" : "other"
-            }`}
-          >
-            <span className="user">{msg.username}</span>
-            {msg.message}
-            <span className="time">{msg.time.slice(0, 5)}</span>
-          </div>
-        ))}
+        {messages.map((msg, index) => {
+          if (!msg.username)
+            return (
+              <div key={index} className="system-message">
+                {msg.message}
+              </div>
+            );
+
+          return (
+            <div
+              key={index}
+              className={`message ${
+                msg.username === user.username ? "self" : "other"
+              }`}
+            >
+              <span className="user">
+                <img
+                  src={
+                    // Se o usuário não tiver imagem, usa a padrão
+                    // verifica se for o usuário atual
+                    usersInfo.filter((u) => u.username === msg.username)
+                      .length === 0
+                      ? User
+                      : profileAssets[
+                          usersInfo
+                            .filter((u) => u.username === msg.username)[0]
+                            .profileImage.split("/")
+                            .pop()
+                            .split(".")[0]
+                        ] || User
+                  }
+                  alt="Profile"
+                  className="profile-image"
+                />
+                {msg.username}
+              </span>
+              {msg.message}
+              <span className="time">{msg.time.slice(0, 5)}</span>
+            </div>
+          );
+        })}
       </div>
 
       <form onSubmit={handleSubmit} className="message-form">
