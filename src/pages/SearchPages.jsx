@@ -72,7 +72,7 @@ const SearchPage = () => {
                 </p>
               </div>
               <div className="btn-actions">
-                {room.members.map((member) => member._id === user._id).length >
+                {room.members.filter((member) => member === user._id).length >
                 0 ? (
                   <NavLink to={`/chat/${room._id}`} className="chat-link">
                     <button className="success">Conversar</button>
