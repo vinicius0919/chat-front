@@ -4,6 +4,7 @@ import UserContext from "../contexts/userContext";
 import { FaUserEdit } from "react-icons/fa";
 import profileAssets from "../hooks/hookProfileAssets";
 import userAuth from "../hooks/hookUserAuth";
+import { useNavigate } from "react-router-dom";
 
 const FormUserProfile = () => {
   const { user, setUser } = useContext(UserContext);
@@ -13,6 +14,7 @@ const FormUserProfile = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageSelect = (image) => {
+    console.log("Imagem selecionada:", image);
     setSelectedImage(image);
   };
 
@@ -22,12 +24,24 @@ const FormUserProfile = () => {
       profileImage: selectedImage,
     });
     if (res.errorMessage) {
+
+      if (res.errorMessage === "Token expirado") {
+        setError("Sua sessão expirou. Faça login novamente.");
+        setTimeout(() => {
+          setError(null);
+          setUser(null);
+          // Aqui você pode adicionar lógica para redirecionar o usuário para a página de login, se necessário.
+        }, 3000);
+        return;
+      }
+
       setError(res.errorMessage);
       setTimeout(() => {
         setError(null);
       }, 3000);
       return;
     }
+    console.log("Resposta da atualização do usuário:", res);
     setUser({ ...user, profileImage: res.user.profileImage });
     setSuccess("Imagem de perfil atualizada com sucesso!");
     setTimeout(() => {
@@ -49,8 +63,8 @@ const FormUserProfile = () => {
           <img
             src={
               selectedImage
-                ? selectedImage
-                : profileAssets[getFileName(user.profileImage)]
+                ? profileAssets[selectedImage].src
+                : profileAssets[getFileName(user.profileImage)].src
             }
             alt="Profile Image"
             onClick={() => {
@@ -94,10 +108,10 @@ const FormUserProfile = () => {
           {profileAssets.getAll.map((asset, index) => (
             <img
               key={index}
-              src={asset}
-              alt={`Profile Asset ${index}`}
-              className={selectedImage === asset ? "selected" : ""}
-              onClick={() => handleImageSelect(asset)}
+              src={asset.src}
+              alt={`Profile Asset ${asset.name}`}
+              className={selectedImage === asset.name ? "selected" : ""}
+              onClick={() => handleImageSelect(asset.name)}
             />
           ))}
         </div>
