@@ -4,7 +4,7 @@ import UserContext from "../contexts/userContext";
 import { FaUserEdit } from "react-icons/fa";
 import profileAssets from "../hooks/hookProfileAssets";
 import userAuth from "../hooks/hookUserAuth";
-import { useNavigate } from "react-router-dom";
+import User from "../assets/user.png";
 
 const FormUserProfile = () => {
   const { user, setUser } = useContext(UserContext);
@@ -62,9 +62,9 @@ const FormUserProfile = () => {
         {(user.profileImage || selectedImage) && (
           <img
             src={
-              selectedImage
+              (selectedImage
                 ? profileAssets[selectedImage].src
-                : profileAssets[getFileName(user.profileImage)].src
+                : profileAssets[user.profileImage].src) || User
             }
             alt="Profile Image"
             onClick={() => {
