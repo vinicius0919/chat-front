@@ -102,12 +102,10 @@ const Chat = ({ setBack }) => {
                       .length === 0
                       ? User
                       : profileAssets[
-                          usersInfo
-                            .filter((u) => u.username === msg.username)[0]
-                            .profileImage.split("/")
-                            .pop()
-                            .split(".")[0]
-                        ] || User
+                          usersInfo.filter(
+                            (u) => u.username === msg.username
+                          )[0].profileImage
+                        ]?.src || User
                   }
                   alt="Profile"
                   className="profile-image"

@@ -10,12 +10,16 @@
 }
 
 .messages_container {
-  flex: 1;
-  overflow-y: auto;
+
   display: flex;
-  flex-direction: column; /* mensagens em ordem normal */
-  padding: 10px;
-  justify-content: flex-end;
+  flex-direction: column;
+  padding: 2rem .5rem 1rem .5rem;
+  gap: 0.5rem;
+  overflow-y: auto;
+  flex: 1;
+  /* inicia a rolagem no final */
+  scroll-behavior: smooth;
+  transition: all 0.3s ease-in-out;
 }
 .message {
   display: flex;
@@ -103,6 +107,9 @@
   .messages_container {
     /* altura total menos a altura do navbar */
     width: 100%;
+    /* permite rolagem vertical */
+    height: calc(100dvh - 120px);
+    box-sizing: border-box;
   }
 
   .message-form {
