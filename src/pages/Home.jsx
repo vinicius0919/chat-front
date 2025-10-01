@@ -25,7 +25,6 @@ const Home = ({ socket, setBack }) => {
     if (rooms.some((r) => r.name.toLowerCase() === newRoom.toLowerCase())) {
       return alert("Já existe uma sala com esse nome!");
     }
-
     socket.emit(
       "create_channel",
       newRoom,
@@ -101,7 +100,7 @@ const Home = ({ socket, setBack }) => {
             id="room"
             placeholder="Digite o nome da sala"
             value={newRoom}
-            onChange={(e) => setNewRoom(e.target.value)}
+            onChange={(e) => setNewRoom(e.target.value.trim())}
             required
           />
           <label htmlFor="room_description">Descrição da sala:</label>
@@ -111,7 +110,7 @@ const Home = ({ socket, setBack }) => {
             id="room_description"
             placeholder="Digite a descrição da sala"
             value={roomDescription}
-            onChange={(e) => setRoomDescription(e.target.value)}
+            onChange={(e) => setRoomDescription(e.target.value.trim())}
             required
           />
 
@@ -134,7 +133,7 @@ const Home = ({ socket, setBack }) => {
                 name="room_password"
                 placeholder="Digite a senha da sala"
                 value={roomPassword}
-                onChange={(e) => setRoomPassword(e.target.value)}
+                onChange={(e) => setRoomPassword(e.target.value.trim())}
                 required
               />
               <div className="toggle-password">
@@ -155,7 +154,7 @@ const Home = ({ socket, setBack }) => {
             name="room_length"
             placeholder="Digite o tamanho da sala"
             value={roomLength}
-            onChange={(e) => setRoomLength(Number(e.target.value))}
+            onChange={(e) => setRoomLength(Number(e.target.value.trim()))}
             required
             min="1"
           />
