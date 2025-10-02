@@ -110,11 +110,7 @@ const Home = ({ socket, setBack }) => {
             id="room_description"
             placeholder="Digite a descrição da sala"
             value={roomDescription}
-<<<<<<< HEAD
-            onChange={(e) => setRoomDescription(e.target.value)}
-=======
             onChange={(e) => setRoomDescription(e.target.value.trim())}
->>>>>>> 4f277a06ec7ac382eff17348c9d26d59531e9dfe
             required
           />
 
