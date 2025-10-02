@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import userAuth from "../hooks/hookUserAuth";
 import UserContext from "../contexts/userContext";
+import socket from "../socket";
 
 const Login = () => {
   const { setUser } = useContext(UserContext);
@@ -31,6 +32,7 @@ const Login = () => {
         _id: response.userId,
         profileImage: response.profileImage || null,
       });
+      socket.auth.token = response.token;
       navigate("/"); // Redirect to home after login
     }
   };

@@ -7,7 +7,7 @@ import userAuth from "../hooks/hookUserAuth";
 import User from "../assets/user.png";
 
 const FormUserProfile = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, logout } = useContext(UserContext);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
   const [inactive, setInactive] = useState(true);
@@ -29,7 +29,7 @@ const FormUserProfile = () => {
         setError("Sua sessão expirou. Faça login novamente.");
         setTimeout(() => {
           setError(null);
-          setUser(null);
+          logout();
           // Aqui você pode adicionar lógica para redirecionar o usuário para a página de login, se necessário.
         }, 3000);
         return;

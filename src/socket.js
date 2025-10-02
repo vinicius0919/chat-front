@@ -1,6 +1,11 @@
 import { io } from "socket.io-client";
 
 const socket = io(import.meta.env.VITE_SERVER_URL, {
+  auth: {
+    token: localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user")).token
+      : null,
+  },
   transports: ["websocket", "polling"], // Use WebSocket and Polling as transports
   autoConnect: true, // Conecta automaticamente
   reconnection: true, // Habilita reconexão automática
@@ -8,6 +13,5 @@ const socket = io(import.meta.env.VITE_SERVER_URL, {
   reconnectionAttempts: 5, // Máximo de 5 tentativas de reconexão
   timeout: 20000, // Timeout de 20 segundos
 });
-
 
 export default socket;
