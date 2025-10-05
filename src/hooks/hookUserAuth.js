@@ -46,7 +46,8 @@ const userAuth = {
       // access token expirou → tenta renovar
       const newToken = await userAuth.refreshToken().accessToken;
       localStorage.setItem('user', JSON.stringify({ token: newToken }));
-      return userAuth.updateUser(userId, userData); // tenta de novo
+      res = await userAuth.updateUser(userId, userData);
+      return res;
     }
 
     return response.json();
