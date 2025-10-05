@@ -42,7 +42,7 @@ const userAuth = {
       credentials: 'include',
     });
 
-    if (response.status === 403 || response.status === 401) {
+    if (response.status === 401) {
       // access token expirou → tenta renovar
       const newToken = await userAuth.refreshToken().accessToken;
       localStorage.setItem('user', JSON.stringify({ token: newToken }));
