@@ -26,13 +26,14 @@ const Login = () => {
       console.error("Login failed:", response.errorMessage);
       setError(response.errorMessage);
     } else {
+      console.log("Login successful:", response);
       setUser({
         username: username,
-        token: response.token,
+        token: response.accessToken,
         _id: response.userId,
         profileImage: response.profileImage || null,
       });
-      socket.auth.token = response.token;
+      socket.auth.token = response.accessToken;
       navigate("/"); // Redirect to home after login
     }
   };

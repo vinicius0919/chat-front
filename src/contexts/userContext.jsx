@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-
+import userAuth from "../hooks/hookUserAuth";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -20,8 +20,8 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
-  }
+    userAuth.logout();
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser, logout }}>

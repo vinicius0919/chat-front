@@ -24,7 +24,7 @@ const Chat = ({ setBack }) => {
         time: new Date().toLocaleTimeString(),
       };
 
-      socket.emit("send_message_to_channel", roomId, data);
+      socket.emit("send_message_to_channel", user.token, roomId, data);
       setMessage({ message: "" });
     }
   };
@@ -40,7 +40,7 @@ const Chat = ({ setBack }) => {
     socket.off("room_messages");
     socket.off("message");
 
-    socket.emit("join_channel", roomId);
+    socket.emit("join_channel", user.token, roomId);
 
     const handleRoomMessages = (msgs, members) => {
       if (msgs && msgs.messages && members) {
@@ -53,7 +53,7 @@ const Chat = ({ setBack }) => {
       setMessages((prev) => [...prev, msg]);
     };
 
-    socket.on("error", (error) => {
+    socket.on("channel_error", (error) => {
       console.error("Erro ao entrar na sala:", error);
       navigate("/");
     });

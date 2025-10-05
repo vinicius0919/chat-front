@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/userContext";
+//import socket from "../socket";
 
 const Home = ({ socket, setBack }) => {
   const navigate = useNavigate();
 
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   const [toggle, setToggle] = useState(false);
   const [newRoom, setNewRoom] = useState("");
@@ -25,8 +26,7 @@ const Home = ({ socket, setBack }) => {
     if (rooms.some((r) => r.name.toLowerCase() === newRoom.toLowerCase())) {
       return alert("Já existe uma sala com esse nome!");
     }
-    socket.emit(
-      "create_channel",
+    console.log(
       newRoom,
       roomDescription,
       roomLength,
@@ -35,16 +35,26 @@ const Home = ({ socket, setBack }) => {
       roomPassword,
       user.username
     );
+    socket.emit(
+      "create_channel",
+      user.token,
+      user._id,
+      newRoom,
+      roomDescription,
+      roomLength,
+      roomType,
+      roomPassword
+    );
 
     // Limpa o formulário
     setNewRoom("");
-    setRoomLength(0);
+    setRoomLength(2);
     setRoomType("public");
     setRoomPassword("");
   };
 
   const handleDeleteRoom = (roomId) => {
-    socket.emit("delete_channel", roomId, user._id);
+    socket.emit("delete_channel", user.token, roomId);
   };
 
   const handleJoin = (room) => {
@@ -53,7 +63,7 @@ const Home = ({ socket, setBack }) => {
 
   useEffect(() => {
     if (user) {
-      socket.emit("get_rooms", user._id);
+      socket.emit("get_rooms", user.token);
       const addRoom = (room) => {
         setRooms((prevRooms) => [...prevRooms, room]);
         console.log("Sala criada:", room);
@@ -70,6 +80,11 @@ const Home = ({ socket, setBack }) => {
       const handleRooms = (data) => {
         setRooms(data);
       };
+
+      socket.on("token_error", (err) => {
+        console.error("Token error:", err);
+        logout();
+      });
       socket.on("channel_created", addRoom);
       socket.on("channel_deleted", removeRoom);
       socket.on("room_messages", handleRoomMessages);

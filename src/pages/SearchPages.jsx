@@ -6,7 +6,7 @@ import { useContext } from "react";
 import UserContext from "../contexts/userContext";
 const SearchPage = () => {
   const { query } = useParams();
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const [results, setResults] = useState([]);
@@ -40,6 +40,12 @@ const SearchPage = () => {
     const fetchData = async () => {
       if (query && search) {
         const data = await channelsApi.searchChannels(user.token, query);
+        // verificar status 401
+        if (data.errorMessage === "Token expirado") {
+          alert("Sua sessão expirou. Por favor, faça login novamente.");
+          logout();
+          navigate("/login");
+        }
         setResults(data);
       }
     };

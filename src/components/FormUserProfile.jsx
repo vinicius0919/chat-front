@@ -20,7 +20,7 @@ const FormUserProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await userAuth.updateUser(user.token, user._id, {
+    const res = await userAuth.updateUser(user._id, {
       profileImage: selectedImage,
     });
     if (res.errorMessage) {
