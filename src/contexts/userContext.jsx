@@ -18,6 +18,24 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
+  // verify if localStorage has changed (another tab)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedUser = localStorage.getItem("user");
+      if (!JSON.parse(savedUser)?.token) {
+        localStorage.removeItem("user");
+        setUser(null);
+      } else {
+        setUser(JSON.parse(savedUser));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const logout = () => {
     setUser(null);
     userAuth.logout();

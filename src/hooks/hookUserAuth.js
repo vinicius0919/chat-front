@@ -44,7 +44,8 @@ const userAuth = {
 
     if (response.status === 403 || response.status === 401) {
       // access token expirou → tenta renovar
-      await userAuth.refreshToken();
+      newToken = await userAuth.refreshToken().acessToken;
+      localStorage.setItem('user', JSON.stringify({ token: newToken }));
       return userAuth.updateUser(userId, userData); // tenta de novo
     }
 
