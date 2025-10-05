@@ -54,7 +54,6 @@ const Chat = ({ setBack }) => {
     };
 
     socket.on("channel_error", (error) => {
-      console.error("Erro ao entrar na sala:", error);
       navigate("/");
     });
 

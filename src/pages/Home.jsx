@@ -26,15 +26,6 @@ const Home = ({ socket, setBack }) => {
     if (rooms.some((r) => r.name.toLowerCase() === newRoom.toLowerCase())) {
       return alert("Já existe uma sala com esse nome!");
     }
-    console.log(
-      newRoom,
-      roomDescription,
-      roomLength,
-      user._id,
-      roomType,
-      roomPassword,
-      user.username
-    );
     socket.emit(
       "create_channel",
       user.token,
@@ -66,10 +57,8 @@ const Home = ({ socket, setBack }) => {
       socket.emit("get_rooms", user.token);
       const addRoom = (room) => {
         setRooms((prevRooms) => [...prevRooms, room]);
-        console.log("Sala criada:", room);
       };
       const removeRoom = (room) => {
-        console.log("Sala deletada:", room);
         setRooms((prevRooms) => prevRooms.filter((r) => r._id !== room._id));
       };
 
@@ -82,7 +71,6 @@ const Home = ({ socket, setBack }) => {
       };
 
       socket.on("token_error", (err) => {
-        console.error("Token error:", err);
         logout();
       });
       socket.on("channel_created", addRoom);

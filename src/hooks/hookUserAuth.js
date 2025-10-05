@@ -11,8 +11,6 @@ const userAuth = {
 
     if (!response.ok) throw new Error("Falha no login");
     const data = await response.json();
-    // console cookies
-    console.log(data.cookies);
     //localStorage.setItem('user', JSON.stringify({ token: data.accessToken }));
     return data;
   },
@@ -44,11 +42,10 @@ const userAuth = {
 
     if (response.status === 401) {
       // access token expirou → tenta renovar
-      const newToken = await userAuth.refreshToken().accessToken;
-      console.log("Novo token:", newToken);
+      const resToken = await userAuth.refreshToken();
       // atualiza o token no localStorage
-      localStorage.setItem('user', JSON.stringify({ token: newToken }));
-      res = await userAuth.updateUser(userId, userData);
+      localStorage.setItem('user', JSON.stringify({ token: resToken.accessToken }));
+      const res = await userAuth.updateUser(userId, userData);
       return res;
     }
 

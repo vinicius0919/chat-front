@@ -30,9 +30,6 @@ const SearchPage = () => {
           )
         );
       })
-      .catch((error) => {
-        console.error("Erro ao entrar na sala:", error);
-      });
   };
 
   // Busca canais quando o parâmetro de busca muda

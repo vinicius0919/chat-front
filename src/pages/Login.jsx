@@ -23,10 +23,8 @@ const Login = () => {
 
     const response = await userAuth.login(username, password);
     if (response.errorMessage) {
-      console.error("Login failed:", response.errorMessage);
       setError(response.errorMessage);
     } else {
-      console.log("Login successful:", response);
       setUser({
         username: username,
         token: response.accessToken,
