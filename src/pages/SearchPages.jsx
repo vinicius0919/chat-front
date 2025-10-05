@@ -39,6 +39,7 @@ const SearchPage = () => {
         const data = await channelsApi.searchChannels(user.token, query);
         // verificar status 401
         if (data.errorMessage === "Token expirado") {
+          console.log("Token expirado - SearchPage");
           alert("Sua sessão expirou. Por favor, faça login novamente.");
           logout();
           navigate("/login");

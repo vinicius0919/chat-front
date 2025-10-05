@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/userContext";
+import userAuth from "../hooks/hookUserAuth";
 //import socket from "../socket";
 
 const Home = ({ socket, setBack }) => {
@@ -70,8 +71,16 @@ const Home = ({ socket, setBack }) => {
         setRooms(data);
       };
 
-      socket.on("token_error", (err) => {
-        logout();
+      socket.on("token_error", async (err) => {
+        // O token expirou, tentar fazer refresh
+        await userAuth.refreshToken().then((res) => {
+          console.log(res);
+          localStorage.setItem("user", JSON.stringify({ token: res.accessToken }));
+          console.log("Token atualizado com sucesso - Home");
+        }).catch((error) => {
+          console.log("Refresh token inválido ou expirado - Home");
+          logout();
+        });
       });
       socket.on("channel_created", addRoom);
       socket.on("channel_deleted", removeRoom);
