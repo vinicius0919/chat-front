@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/userContext";
+import channelsApi from "../hooks/hookChannels";
 //import socket from "../socket";
 
 const Home = ({ socket, setBack }) => {
@@ -16,27 +17,39 @@ const Home = ({ socket, setBack }) => {
   const [roomPassword, setRoomPassword] = useState("");
   const [rooms, setRooms] = useState([]);
 
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
 
     if (!newRoom.trim()) return alert("Digite um nome para a sala.");
     if (roomLength <= 0)
       return alert("O tamanho da sala deve ser maior que 0.");
 
-    if (rooms.some((r) => r.name.toLowerCase() === newRoom.toLowerCase())) {
-      return alert("Já existe uma sala com esse nome!");
-    }
-    socket.emit(
-      "create_channel",
-      user.token,
-      user._id,
-      newRoom,
-      roomDescription,
-      roomLength,
-      roomType,
-      roomPassword
-    );
+    await channelsApi
+      .createChannel(
+        user.token,
+        newRoom.trim(),
+        roomDescription.trim(),
+        user._id,
+        {
+          maxMembers: roomLength,
+          roomType,
+          password: roomType === "private" ? roomPassword : undefined,
+        }
+      )
+      .then((data) => {
+        console.log("Data recebida:", data);
 
+        if (data.errorMessage == "Token expirado") {
+          logout();
+        }
+        if (data.errorMessage) {
+          return alert(`Erro ao criar sala: ${data.errorMessage}`);
+        }
+        setRooms((prevRooms) => [...prevRooms, data]);
+      })
+      .catch((err) => {
+        alert(`Erro ao criar sala: ${err.message}`);
+      });
     // Limpa o formulário
     setNewRoom("");
     setRoomLength(2);
@@ -44,48 +57,79 @@ const Home = ({ socket, setBack }) => {
     setRoomPassword("");
   };
 
-  const handleDeleteRoom = (roomId) => {
-    socket.emit("delete_channel", user.token, roomId);
+  const handleDeleteRoom = async (roomId, uid) => {
+    console.log("User:", user._id);
+    console.log("UID:", uid);
+    if (user._id !== uid) {
+      return alert("Apenas o dono da sala pode deletá-la.");
+    }
+    await channelsApi
+      .deleteChannel(user.token, roomId, uid)
+      .then((data) => {
+        if (data.status === 401) {
+          logout();
+          return;
+        }
+        if (data.status !== 204) {
+          console.log("Erro ao deletar sala:", data);
+          return alert("Erro ao deletar sala.");
+        }
+        console.log("Sala deletada com sucesso:", data);
+        setRooms((prevRooms) =>
+          prevRooms.filter((room) => room._id !== roomId)
+        );
+      })
+      .catch((err) => {
+        console.log("Erro ao deletar sala (CATCH):", err);
+        alert(`Erro ao deletar sala: ${err.message}`);
+      });
   };
 
   const handleJoin = (room) => {
     navigate(`/chat/${room}`);
   };
 
+  // useEffect(() => {
+  //   if (user) {
+  //     socket.emit("get_rooms", user.token);
+  //     const addRoom = (room) => {
+  //       setRooms((prevRooms) => [...prevRooms, room]);
+  //     };
+  //     const removeRoom = (room) => {
+  //       setRooms((prevRooms) => prevRooms.filter((r) => r._id !== room._id));
+  //     };
+
+  //     const handleRoomMessages = (data) => {
+  //       setMessages(data);
+  //     };
+
+  //     const handleRooms = (data) => {
+  //       setRooms(data);
+  //     };
+
+  //     socket.on("token_error", (err) => {
+  //       logout();
+  //     });
+  //     socket.on("channel_created", addRoom);
+  //     socket.on("channel_deleted", removeRoom);
+  //     socket.on("room_messages", handleRoomMessages);
+  //     socket.on("rooms", handleRooms);
+
+  //     return () => {
+  //       socket.off("channel_created", addRoom);
+  //       socket.off("channel_deleted", removeRoom);
+  //       socket.off("room_messages", handleRoomMessages);
+  //       socket.off("rooms", handleRooms);
+  //     };
+  //   }
+  // }, [socket]);
   useEffect(() => {
-    if (user) {
-      socket.emit("get_rooms", user.token);
-      const addRoom = (room) => {
-        setRooms((prevRooms) => [...prevRooms, room]);
-      };
-      const removeRoom = (room) => {
-        setRooms((prevRooms) => prevRooms.filter((r) => r._id !== room._id));
-      };
-
-      const handleRoomMessages = (data) => {
-        setMessages(data);
-      };
-
-      const handleRooms = (data) => {
-        setRooms(data);
-      };
-
-      socket.on("token_error", (err) => {
-        logout();
-      });
-      socket.on("channel_created", addRoom);
-      socket.on("channel_deleted", removeRoom);
-      socket.on("room_messages", handleRoomMessages);
-      socket.on("rooms", handleRooms);
-
-      return () => {
-        socket.off("channel_created", addRoom);
-        socket.off("channel_deleted", removeRoom);
-        socket.off("room_messages", handleRoomMessages);
-        socket.off("rooms", handleRooms);
-      };
-    }
-  }, [socket]);
+    const fetchChannels = async () => {
+      const data = await channelsApi.getChannelsByUserId(user.token, user._id);
+      setRooms(data);
+    };
+    fetchChannels();
+  }, []);
 
   useEffect(() => {
     setBack(false);
@@ -103,7 +147,7 @@ const Home = ({ socket, setBack }) => {
             id="room"
             placeholder="Digite o nome da sala"
             value={newRoom}
-            onChange={(e) => setNewRoom(e.target.value.trim())}
+            onChange={(e) => setNewRoom(e.target.value)}
             required
           />
           <label htmlFor="room_description">Descrição da sala:</label>
@@ -113,7 +157,7 @@ const Home = ({ socket, setBack }) => {
             id="room_description"
             placeholder="Digite a descrição da sala"
             value={roomDescription}
-            onChange={(e) => setRoomDescription(e.target.value.trim())}
+            onChange={(e) => setRoomDescription(e.target.value)}
             required
           />
 
@@ -166,7 +210,7 @@ const Home = ({ socket, setBack }) => {
       </div>
 
       <div className="rooms">
-        {rooms.length > 0 ? (
+        {rooms?.length > 0 ? (
           rooms.map((room, index) => (
             <div key={index} className="room">
               <div className="room-info">
@@ -189,7 +233,7 @@ const Home = ({ socket, setBack }) => {
                 {user._id === room.owner._id && (
                   <button
                     className="success"
-                    onClick={() => handleDeleteRoom(room._id)}
+                    onClick={() => handleDeleteRoom(room._id, room.owner._id)}
                   >
                     Deletar
                   </button>

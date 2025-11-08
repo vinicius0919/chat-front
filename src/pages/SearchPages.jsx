@@ -43,7 +43,7 @@ const SearchPage = () => {
           logout();
           navigate("/login");
         }
-        setResults(data);
+        setResults(data.channels || []);
       }
     };
     fetchData();

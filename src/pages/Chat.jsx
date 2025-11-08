@@ -17,13 +17,13 @@ const Chat = ({ setBack }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!message.message.trim()) return;
     if (roomId && user) {
       const data = {
         ...message,
         username: user.username,
         time: new Date().toLocaleTimeString(),
       };
-
       socket.emit("send_message_to_channel", user.token, roomId, data);
       setMessage({ message: "" });
     }
