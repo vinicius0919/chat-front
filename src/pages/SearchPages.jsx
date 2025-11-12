@@ -37,13 +37,14 @@ const SearchPage = () => {
     const fetchData = async () => {
       if (query && search) {
         const data = await channelsApi.searchChannels(user.token, query);
+        console.log(data);
         // verificar status 401
         if (data.errorMessage === "Token expirado") {
           alert("Sua sessão expirou. Por favor, faça login novamente.");
           logout();
           navigate("/login");
         }
-        setResults(data.channels || []);
+        setResults(data || []);
       }
     };
     fetchData();
@@ -75,7 +76,7 @@ const SearchPage = () => {
                 </p>
               </div>
               <div className="btn-actions">
-                {room.members.filter((member) => member === user._id).length >
+                {room.members.filter((member) => member._id === user._id).length >
                 0 ? (
                   <NavLink to={`/chat/${room._id}`} className="chat-link">
                     <button className="success">Conversar</button>

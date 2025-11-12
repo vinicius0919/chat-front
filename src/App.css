@@ -20,6 +20,31 @@ h2 {
   font-weight: bold;
   color: var(--highlights);
 }
+.validations-container{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.validations-container p{
+  margin: 0;
+  text-align: center;
+}
+.validations-container ul{
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  gap: 5px;
+}
+.validations-list li{
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  list-style: none;
+}
+
+.validations-list li.invalid{
+  color: var(--highlights);
+}
 
 .login-container,
 .register-container {
@@ -194,6 +219,7 @@ footer{
   padding: 1rem;
   background-color: var(--container-background);
   border-top: 1px solid var(--borders);
+  bottom: 0;
 }
 footer p {
   color: var(--text-color-secondary);
