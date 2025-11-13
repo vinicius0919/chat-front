@@ -80,6 +80,7 @@ const FormUserProfile = () => {
             }}
           />
         )}
+        <p className="p-profile" >*Toque no ícone acima para selecionar uma nova imagem de perfil</p>
         <label htmlFor="username">Nome de usuário</label>
         <input
           type="text"
@@ -89,12 +90,12 @@ const FormUserProfile = () => {
           disabled
         />
         <label htmlFor="password">Senha</label>
-        <button type="button" className="secondary">
+        <button type="button" className="secondary" disabled>
           Redefinir Senha
         </button>
 
         <div>
-          <input type="checkbox" name="privacity" id="privacity" />
+          <input type="checkbox" name="privacity" id="privacity" disabled/>
           <label htmlFor="privacity">Tornar meu perfil privado</label>
         </div>
         <input type="submit" className="success" value="Salvar" />

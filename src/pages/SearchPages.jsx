@@ -20,7 +20,6 @@ const SearchPage = () => {
       .addMember(user.token, channelId, user._id)
       .then((response) => {
         // Adiciona o usuário à sala
-        console.log(response);
         // atualiza a lista de resultados para refletir a mudança
         setResults((prevResults) =>
           prevResults.map((room) =>
@@ -37,7 +36,6 @@ const SearchPage = () => {
     const fetchData = async () => {
       if (query && search) {
         const data = await channelsApi.searchChannels(user.token, query);
-        console.log(data);
         // verificar status 401
         if (data.errorMessage === "Token expirado") {
           alert("Sua sessão expirou. Por favor, faça login novamente.");

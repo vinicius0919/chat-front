@@ -33,11 +33,10 @@ const Home = ({ socket, setBack }) => {
         {
           maxMembers: roomLength,
           roomType,
-          password: roomType === "private" ? roomPassword : undefined,
+          roomPassword: roomType === "private" ? roomPassword : undefined,
         }
       )
       .then((data) => {
-        console.log("Data recebida:", data);
 
         if (data.errorMessage == "Token expirado") {
           logout();
@@ -58,8 +57,7 @@ const Home = ({ socket, setBack }) => {
   };
 
   const handleDeleteRoom = async (roomId, uid) => {
-    console.log("User:", user._id);
-    console.log("UID:", uid);
+
     if (user._id !== uid) {
       return alert("Apenas o dono da sala pode deletá-la.");
     }
@@ -70,17 +68,14 @@ const Home = ({ socket, setBack }) => {
           logout();
           return;
         }
-        if (data.status !== 204) {
-          console.log("Erro ao deletar sala:", data);
-          return alert("Erro ao deletar sala.");
+        if (data.status !== 200 && data.status !== 204) {
+          return alert("Erro ao deletar sala.", data.status);
         }
-        console.log("Sala deletada com sucesso:", data);
         setRooms((prevRooms) =>
           prevRooms.filter((room) => room._id !== roomId)
         );
       })
       .catch((err) => {
-        console.log("Erro ao deletar sala (CATCH):", err);
         alert(`Erro ao deletar sala: ${err.message}`);
       });
   };
